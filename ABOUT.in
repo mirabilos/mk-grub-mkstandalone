@@ -9,6 +9,9 @@ The COPYRIGHT subdirectory contains relevant excerpts of licences
 used by the binaries provided herein and their Built-Using, as
 necessary, unless the files themselves embed sufficient information.
 
+source	@@SRCVER@@
+distadd	@@DADDVER@@
+
 ┌────────────┐
 │ Provenance │
 └────────────┘
