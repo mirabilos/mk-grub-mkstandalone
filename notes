@@ -1,0 +1,35 @@
+grub-install: info: grub-mkimage --directory '/usr/lib/grub/i386-pc' --prefix '(,msdos1)/grub'
+--output '/boot/grub/i386-pc/core.img'  --dtb '' --sbat '' --format 'i386-pc'
+ --compression 'auto'
+'ext2' 'part_msdos' 'biosdisk'
+
+grub-bios-setup --verbose --directory='/boot/grub/i386-pc' --device-map='/boot/grub/device.map' '/dev/sda'
+
+biosdisk part_msdos part_bsd ext2 fat iso9660 ntfs ufs1 gzio
+
+gnu$ sudo hdparm --fibmap /etc/profile
+
+/etc/profile:
+ filesystem blocksize 4096, begins at LBA 0; assuming 512 byte sectors.
+ byte_offset  begin_LBA    end_LBA    sectors
+           0    8651792    8651799          8
+bsd$ getextent_cd9660 -bens -f /MirOS/current/i386/cdsshd10.iso
+19 19 2048 $BootCatalog$
+20 20 2048 $BootImage$
+4677 4681 9503 00_README
+4682 4682 1038 BOOT.CFG
+4683 4713 61472 B_I386.LDR
+gnu$ sudo hdparm --fibmap /boot/foo
+
+/boot/foo:
+ filesystem blocksize 4096, begins at LBA 2048; assuming 512 byte sectors.
+ byte_offset  begin_LBA    end_LBA    sectors
+           0     270456     270463          8
+       28672     270464     270471          8
+gnu$ sudo hdparm --fibmap /boot/grub/grub.cfg
+
+/boot/grub/grub.cfg:
+ filesystem blocksize 4096, begins at LBA 2048; assuming 512 byte sectors.
+ byte_offset  begin_LBA    end_LBA    sectors
+           0     268504     268519         16
+        8192     272744     272751          8

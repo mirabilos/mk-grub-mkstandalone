@@ -1,0 +1,68 @@
+┏━━━━━━━━━━━━━━━━━━━━━━┓
+┃ mk-grub-mkstandalone ┃
+┗━━━━━━━━━━━━━━━━━━━━━━┛
+
+This is the source code repository for a “make a GRUB 2 standalone
+bootable partition” toolkit. Binary releases contain extra files
+copied from elsewhere, with provenance information and copyrights
+and licences reproduced; they are named “GRUBpak”.
+
+“GRUB” is probably a trademark of the GNU project or something.
+This toolkit uses it, without claiming it, denoting that it’s
+intended to be used with GRUB, and that it’ll install GRUB.
+
+┌────────────┐
+│ Motivation │
+└────────────┘
+
+Occasionally you’ll want to install a standalone version of GRUB,
+for example to use for memdisk or to boot various operating systems
+it can start but not using an OS with “native” GRUB support. Say an
+old laptop with DOS/WinNT|2k|XP/BSD. They all have native loaders,
+however maybe you want to add a grml32-small ISO for rescue purposes
+and to install DOS without a floppy disc drive you need memdisk, and
+MirBSD’s bootloader is a Multiboot OS kernel that can be kickstarted
+from GRUB (passing boot.cfg and the actual bsd kernels as modules).
+You’ve got the SuperGRUB2Disc on a USB stick but prefer to lose that
+physical hassle. (memdisk here means the tool that can load an image
+to RAM and boot that.)
+
+There’s grub-install which is actually supported, but it’s not very
+standalone, and you’ll probably enter its rescue shell more than once
+due to missing modules…
+
+There’s grub-mkimage and the even less-documented grub-mkstandalone
+but their result cannot be installed as upstream explicitly states
+nobody has any reason to call grub-bios-setup themselves, and most
+grub-mkstandalone users seem to create EFI, ISO or USB stick images
+instead, anyway. grub-mkimage can create a core.img file with your
+custom modules list, grub-mkstandalone creates one with less modules
+built in but with a “memdisk” (GRUB module: like Linux initramfs)
+containing all modules (and user-provided extra files if requested).
+
+Somehow grub-extras has a thing that, supposedly, enables booting
+these core images from ntldr (NT/2k/XP) but it’s even more undocu‐
+mented, and according to a Knoppix forum post, you’d need an extra
+file that isn’t available on the internet any more to boot on pre-XP.
+Also, what if ntldr breaks… (MirBSD supplies an MBR bootmanager that
+offers booting any primary partition.)
+
+┌──────────┐
+│ Overview │
+└──────────┘
+
+This is where mk-grub-mkstandalone comes in. It’s comprised of:
+
+• a wrapper around grub-mkstandalone, populating the memdisk² with a
+  grub.cfg doing some insmod calls (unless you provide your own) and
+  adding SYSLINUX’ memdisk so you can use it with floppy/ISO images
+  with no extra hassle; enough information to reproduce the stand‐
+  alone core image is also included; this is intended to run on your
+  “work” Debian system, ideally Debian bullseye (amd64 or i386 will
+  work as long as you install grub-pc-bin (for the i386-pc GRUB files)
+  and syslinux-common, for memdisk¹ and will create one image file
+
+• glue tying multiple components together that are intended to be run
+  on the target system, from a Live GNU/Linux distro (like grml.org);
+  you’d copy the core image generated above and these tools to the
+  live system, mount a partition (create
