@@ -5,7 +5,8 @@
 This is the source code repository for a “make a GRUB 2 standalone
 bootable partition” toolkit. Binary releases contain extra files
 copied from elsewhere, with provenance information and copyrights
-and licences reproduced; they are named “GRUBpak”.
+and licences reproduced; they are named “GRUBpak” and are available
+from: https://github.com/mirabilos/mk-grub-mkstandalone
 
 “GRUB” is probably a trademark of the GNU project or something.
 This toolkit uses it, without claiming it, denoting that it’s
