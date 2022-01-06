@@ -1,0 +1,41 @@
+┏━━━━━━━━━┓
+┃ GRUBpak ┃ version @@VERSION@@
+┗━━━━━━━━━┛
+
+This is a “binary” distribution of the “make a GRUB 2 standalone
+bootable partition” toolkit; for more info, read the README.
+
+The COPYRIGHT subdirectory contains relevant excerpts of licences
+used by the binaries provided herein and their Built-Using, as
+necessary, unless the files themselves embed sufficient information.
+
+┌────────────┐
+│ Provenance │
+└────────────┘
+
+• bootgrub.mksh
+• bootgrubfat.mksh
+
+	Built on 2022-01-06 from MirBSD-current CVS:
+	$ cd /sys/arch/i386/stand/bootxx
+	$ make obj
+	$ make cleandir
+	$ lo obj/ # visually check it’s empty
+	$ make BOOT_TYPE=grub depend
+	$ make BOOT_TYPE=grub
+	$ cp obj/bootgrub.mksh ~
+	$ make clean
+	$ make BOOT_TYPE=grubfat
+	$ cp obj/bootgrubfat.mksh ~
+	$ make cleandir
+
+• mbrmgr.bin (mbrmgr.ver)
+
+	Built on 2022-01-06 from MirBSD-current CVS (normal make).
+	Licence is identical to bootgrub.mksh by same author.
+
+• mksh
+
+	ELF32 Linux/i386 statically linked binary
+	mc: deb://CONTENTS/usr/lib/klibc/bin/mksh
+	from mksh:i386=59c-9+b2 (Debian bullseye)
