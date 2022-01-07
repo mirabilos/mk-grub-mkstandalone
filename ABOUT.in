@@ -43,3 +43,6 @@ distadd	@@DADDVER@@
 	ELF32 Linux/i386 statically linked binary
 	mc: deb://CONTENTS/usr/lib/klibc/bin/mksh
 	from mksh:i386=59c-9+b2 (Debian bullseye)
+
+All other files come from the source repository (see README);
+they are all published under Ⓕ The MirOS Licence © mirabilos.
