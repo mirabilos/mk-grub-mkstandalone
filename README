@@ -68,9 +68,12 @@ This is where mk-grub-mkstandalone comes in. It’s comprised of:
   you’d copy the core image generated above and these tools to the
   live system, mount a partition (create and mkfs it first if needed)
   and copy that aforementioned core image, and any other files you’ll
-  want, there, then run a script that makes the partition bootable;
-  another script will install a suitable MBR (from MirBSD, either a
-  normal loader or the aforementioned boot manager) if needed
+  want, there, then run a script that makes the partition bootable or
+  install the bootsector to the MBR or write into a file
+
+• when necessary, another script will install an MBR suitable to load
+  operating systems (either the aforementioned boot manager or simply
+  a loader for the active primary partition)
 
 What is this not?
 
