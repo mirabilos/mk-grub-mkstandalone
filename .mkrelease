@@ -1,0 +1,100 @@
+#!/usr/bin/env mksh
+# -*- mode: sh -*-
+#-
+# Copyright © 2022
+#	mirabilos <m@mirbsd.org>
+# Copyright © 2016, 2017, 2018, 2019, 2020
+#	mirabilos <t.glaser@tarent.de>
+#
+# Provided that these terms and disclaimer and all copyright notices
+# are retained or reproduced in an accompanying document, permission
+# is granted to deal in this work without restriction, including un‐
+# limited rights to use, publicly perform, distribute, sell, modify,
+# merge, give away, or sublicence.
+#
+# This work is provided “AS IS” and WITHOUT WARRANTY of any kind, to
+# the utmost extent permitted by applicable law, neither express nor
+# implied; without malicious intent or gross negligence. In no event
+# may a licensor, author or contributor be held liable for indirect,
+# direct, other damage, loss, or other issues arising in any way out
+# of dealing in the work, even if advised of the possibility of such
+# damage or existence of a defect, except proven that it results out
+# of said person’s immediate fault when using the work as intended.
+
+export LC_ALL=C
+unset LANGUAGE GZIP
+set -e
+set -o pipefail
+umask 022
+
+me=$(realpath "$0/..")
+cd "$me"
+
+die() {
+	print -ru2 -- "E: $*"
+	exit 1
+}
+
+[[ $1 = [0-9]*([0-9A-Za-z+.-]) ]] || die name the release
+v=$1
+
+rm -rf dist
+qs=
+if [[ $2 = test ]]; then
+	[[ -z $(git status --porcelain) ]] || qs=+dirty
+	v+=$qs-test$(date -u +'%Y%m%dT%H%M%SZ')
+else
+	[[ -z $(git status --porcelain) ]] || die source tree not clean
+fi
+mkdir dist
+mkdir dist/t
+mkdir "dist/t/grubpak-$1"
+mkdir dist/t/src
+git ls-tree -r --name-only -z HEAD | sort -z | paxcpio -p0du dist/t/src/
+tss=$(TZ=UTC git show --no-patch --pretty=format:%ad \
+    --date=format-local:%Y%m%d%H%M.%S)
+if tag=$(git describe --exact-match 2>/dev/null) && [[ -n $tag ]]; then
+	qs="$(git rev-parse HEAD)$qs (tag $tag)"
+else
+	qs="$(git rev-parse HEAD)$qa"
+fi
+cd dist/t/src
+find . -type f -print0 | xargs -0r chmod 644
+find . -print0 | TZ=UTC xargs -0r touch -h -t "$tss" --
+cd ..
+git clone -b distadd ../../.git pak
+mkdir add
+cd pak
+git ls-tree -r --name-only -z HEAD | sort -z | paxcpio -p0du ../add/
+tsb=$(TZ=UTC git show --no-patch --pretty=format:%ad \
+    --date=format-local:%Y%m%d%H%M.%S)
+qb="$(git rev-parse HEAD)"
+cd ..
+rm -rf pak
+cd add
+sed --posix \
+    -e "s/@@VERSION@@/$v/g" \
+    -e "s@@SRCVER@@$qsg" \
+    -e "s@@DADDVER@@$qbg" \
+    ABOUT.in >../ABOUT
+find . -type f -print0 | xargs -0r chmod a+r,u+w,go-w
+find . -print0 | TZ=UTC xargs -0r touch -h -t "$tsb" --
+pax -rw -pe . ../"grubpak-$1"/
+cd ../src
+pax -rw -pe . ../"grubpak-$1"/
+cd ../"grubpak-$1"
+mv ../ABOUT .
+chmod 644 ABOUT
+if [[ ABOUT.in -nt README ]]; then
+	touch -h -t "$tsb" ABOUT
+else
+	touch -h -t "$tss" ABOUT
+fi
+rm ABOUT.in
+cd ..
+find "grubpak-$1" \( -type f -o -type l \) -print0 | sort -z | \
+    paxcpio -oC512 -0 -Hustar -Mdist | gzip -n9 >"../grubpak-$1.tgz"
+cd ..
+rm -rf t
+cd "$me"
+ls -l "dist/grubpak-$1.tgz"
