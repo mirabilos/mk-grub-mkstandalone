@@ -9,6 +9,8 @@ The COPYRIGHT subdirectory contains relevant excerpts of licences
 used by the binaries provided herein and their Built-Using, as
 necessary, unless the files themselves embed sufficient information.
 
+The GRUBpak collection is: © 2022 mirabilos Ⓕ MirBSD
+
 source	@@SRCVER@@
 distadd	@@DADDVER@@
 
@@ -36,7 +38,7 @@ distadd	@@DADDVER@@
 • mbrmgr.bin (mbrmgr.ver)
 
 	Built on 2022-01-07 from MirBSD-current CVS (normal make).
-	Licence is identical to bootgrub*.mksh by same author.
+	Licence is identical to bootgrub*.mksh (MirBSD), same author.
 
 • mksh
 
