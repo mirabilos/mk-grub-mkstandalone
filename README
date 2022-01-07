@@ -66,4 +66,24 @@ This is where mk-grub-mkstandalone comes in. It’s comprised of:
 • glue tying multiple components together that are intended to be run
   on the target system, from a Live GNU/Linux distro (like grml.org);
   you’d copy the core image generated above and these tools to the
-  live system, mount a partition (create
+  live system, mount a partition (create and mkfs it first if needed)
+  and copy that aforementioned core image, and any other files you’ll
+  want, there, then run a script that makes the partition bootable;
+  another script will install a suitable MBR (from MirBSD, either a
+  normal loader or the aforementioned boot manager) if needed
+
+What is this not?
+
+• a live, rescue or anything image builder, this chiefly helps
+  installing such on your normal hard disc alongside other OSes
+
+• anything related to EFI; this is strictly i386-pc (plus GPT
+  sucks, EFI sucks, Restricted Boot (what they should have named
+  “secure” boot) sucks, and the (UEFI) reference implementation
+  is a huge (larger than Linux!) pile of security nightmares
+  waiting to happen…)
+  ‣ that being said, this can make the image bootable from any
+    PBR even with GPT, Sun disklabel, or other partitioning
+    schemes (as long as you supply a suitable bootloader chain
+    up to the PBR) or even as bootsector image file…
+  ‣ but we only supply a classic BIOS/CSM MBR for those who want
