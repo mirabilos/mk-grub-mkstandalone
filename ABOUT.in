@@ -19,7 +19,7 @@ distadd	@@DADDVER@@
 • bootgrub.mksh
 • bootgrubfat.mksh
 
-	Built on 2022-01-06 from MirBSD-current CVS:
+	Built on 2022-01-07 from MirBSD-current CVS:
 	$ cd /sys/arch/i386/stand/bootxx
 	$ make obj
 	$ make cleandir
@@ -35,8 +35,8 @@ distadd	@@DADDVER@@
 • mbrldr.bin (mbrldr.ver)
 • mbrmgr.bin (mbrmgr.ver)
 
-	Built on 2022-01-06 from MirBSD-current CVS (normal make).
-	Licence is identical to bootgrub.mksh by same author.
+	Built on 2022-01-07 from MirBSD-current CVS (normal make).
+	Licence is identical to bootgrub*.mksh by same author.
 
 • mksh
 
