@@ -37,7 +37,7 @@ distadd	@@DADDVER@@
 • mbrldr.bin (mbrldr.ver)
 • mbrmgr.bin (mbrmgr.ver)
 
-	Built on 2022-01-07 from MirBSD-current CVS (normal make).
+	Built on 2022-01-08 from MirBSD-current CVS (normal make).
 	Licence is identical to bootgrub*.mksh (MirBSD), same author.
 
 • mksh
